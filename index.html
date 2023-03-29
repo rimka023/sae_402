@@ -40,9 +40,9 @@
             0.1, // Near clipping plane
             1000 // Far clipping plane
         );
-        camera.position.x = 600
-        camera.position.y = 400
-        camera.position.z = 0
+        camera.position.x = 600;
+        camera.position.y = 400;
+        camera.position.z = 0;
 
         // Create a renderer
         const renderer = new THREE.WebGLRenderer();
@@ -106,30 +106,30 @@
         const control = new OrbitControls(camera, renderer.domElement)
 
         // Add mouse events for dragging the cube
-        // let mouseDown = false;
-        // let mouseX = 0, mouseY = 0;
-        // let cubeX = 0, cubeY = 0;
-        // const onMouseDown = (event) => {
-        // mouseDown = true;
-        // mouseX = event.clientX;
-        // mouseY = event.clientY;
-        // cubeX = cube.position.x;
-        // cubeY = cube.position.y;
-        // };
-        // const onMouseUp = (event) => {
-        // mouseDown = false;
-        // };
-        // const onMouseMove = (event) => {
-        // if (mouseDown) {
-        //     const deltaX = event.clientX - mouseX;
-        //     const deltaY = event.clientY - mouseY;
-        //     cube.position.x = cubeX + deltaX / 100;
-        //     cube.position.y = cubeY - deltaY / 100;
-        // }
-        // };
-        // renderer.domElement.addEventListener('mousedown', onMouseDown);
-        // renderer.domElement.addEventListener('mouseup', onMouseUp);
-        // renderer.domElement.addEventListener('mousemove', onMouseMove);
+        let mouseDown = false;
+        let mouseX = 0, mouseY = 0;
+        let cubeX = 0, cubeY = 0;
+        const onMouseDown = (event) => {
+        mouseDown = true;
+        mouseX = event.clientX;
+        mouseY = event.clientY;
+        cubeX = cube.position.x;
+        cubeY = cube.position.y;
+        };
+        const onMouseUp = (event) => {
+        mouseDown = false;
+        };
+        const onMouseMove = (event) => {
+        if (mouseDown) {
+            const deltaX = event.clientX - mouseX;
+            const deltaY = event.clientY - mouseY;
+            cube.position.x = cubeX + deltaX / 100;
+            cube.position.y = cubeY - deltaY / 100;
+        }
+        };
+        renderer.domElement.addEventListener('mousedown', onMouseDown);
+        renderer.domElement.addEventListener('mouseup', onMouseUp);
+        renderer.domElement.addEventListener('mousemove', onMouseMove);
         
         renderer.setClearColor(0xcccccc, 1, 0)
 
@@ -137,7 +137,7 @@
         const animate = () => {
             requestAnimationFrame(animate);
             renderer.render(scene, camera);
-            cube.rotation.y += 0.01
+            cube.rotation.y += 0.03
         };
         animate();
 
