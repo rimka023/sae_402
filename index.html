@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Three.js Cube</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.131.2/build/three.min.js"></script>
+    <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+
+    <script type="importmap">
+        {
+        "imports": {
+            "three": "../node_modules/three/build/three.module.js",
+            "orbitcontrols": "../node_modules/three/examples/jsm/controls/OrbitControls.js",
+            "gui": "../node_modules/three/examples/jsm/libs/lil-gui.module.min.js"
+        }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'orbitcontrols';
+
+        // Create a Three.js scene
+        const scene = new THREE.Scene();
+
+        // Create a camera
+        const camera = new THREE.PerspectiveCamera(
+        75, // Field of view
+        window.innerWidth / window.innerHeight, // Aspect ratio
+        0.1, // Near clipping plane
+        1000 // Far clipping plane
+        );
+        camera.position.z = 5;
+
+        // Create a renderer
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Create a cube
+        const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+        const cubeMaterial = new THREE.MeshBasicMaterial({ color: Math.random() < 0.5 ? 0xff0000 : 0x0000ff });
+        const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+        scene.add(cube);
+
+        let clicked = false;
+        let originalColor = cubeMaterial.color.clone();
+        const onClick = () => {
+        if (!clicked) {
+            clicked = true;
+            cubeMaterial.color = new THREE.Color(0x00ff00);
+            setTimeout(() => {
+            clicked = false;
+            cubeMaterial.color = originalColor;
+            }, 1000);
+        }
+        };
+
+        // Add mouse events for dragging the cube
+        let mouseDown = false;
+        let mouseX = 0, mouseY = 0;
+        let cubeX = 0, cubeY = 0;
+        const onMouseDown = (event) => {
+        mouseDown = true;
+        mouseX = event.clientX;
+        mouseY = event.clientY;
+        cubeX = cube.position.x;
+        cubeY = cube.position.y;
+        };
+        const onMouseUp = (event) => {
+        mouseDown = false;
+        };
+        const onMouseMove = (event) => {
+        if (mouseDown) {
+            const deltaX = event.clientX - mouseX;
+            const deltaY = event.clientY - mouseY;
+            cube.position.x = cubeX + deltaX / 100;
+            cube.position.y = cubeY - deltaY / 100;
+        }
+        };
+        renderer.domElement.addEventListener('mousedown', onMouseDown);
+        renderer.domElement.addEventListener('mouseup', onMouseUp);
+        renderer.domElement.addEventListener('mousemove', onMouseMove);
+
+        // Render the scene
+        const animate = () => {
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+        cube.rotation.y += 0.01
+        };
+        animate();
+
+
+
+
+    </script>
+</body>
+
+</html>
