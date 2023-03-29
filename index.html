@@ -1,109 +1,218 @@
 <!DOCTYPE html>
-<html>
-
-<head>
-    <meta charset="utf-8" />
-    <title>Three.js Cube</title>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Three JS 1</title>
     <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-        }
+      * {margin: 0; padding: 0; box-sizing: border-box;}
     </style>
-</head>
-
-<body>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.131.2/build/three.min.js"></script>
-    <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+  </head>
+  <body>
+    <!-- Import maps polyfill -->
+    <!-- Remove this when import maps will be widely supported -->
+    
+    <script
+      async
+      src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"
+    ></script>
 
     <script type="importmap">
-        {
+      {
         "imports": {
-            "three": "../node_modules/three/build/three.module.js",
-            "orbitcontrols": "../node_modules/three/examples/jsm/controls/OrbitControls.js",
-            "gui": "../node_modules/three/examples/jsm/libs/lil-gui.module.min.js"
+          "three": "../node_modules/three/build/three.module.js",
+          "orbitcontrols": "../node_modules/three/examples/jsm/controls/OrbitControls.js",
+          "gui": "../node_modules/three/examples/jsm/libs/lil-gui.module.min.js"
         }
-        }
+      }
     </script>
 
     <script type="module">
-        import * as THREE from 'three';
-        import { OrbitControls } from 'orbitcontrols';
+      import * as THREE from 'three';
+      import { OrbitControls } from 'orbitcontrols';
+      import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 
-        // Create a Three.js scene
-        const scene = new THREE.Scene();
+      const App = { 
+        scene: undefined,
+        camera: undefined,
+        spotLight: undefined,
+        renderer: undefined,
+        controls: undefined,
 
-        // Create a camera
-        const camera = new THREE.PerspectiveCamera(
-        75, // Field of view
-        window.innerWidth / window.innerHeight, // Aspect ratio
-        0.1, // Near clipping plane
-        1000 // Far clipping plane
-        );
-        camera.position.z = 5;
+        init: function(){
+          this.createScene()
+          this.createCamera()
+          this.createLight()
+          this.createRenderer()
+          this.addMesh()
 
-        // Create a renderer
-        const renderer = new THREE.WebGLRenderer();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
+          this.creatOrbitCtrl()
+          this.createCtrl()
+          this.render()
+          this.animate()
 
-        // Create a cube
-        const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
-        const cubeMaterial = new THREE.MeshBasicMaterial({ color: Math.random() < 0.5 ? 0xff0000 : 0x0000ff });
-        const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-        scene.add(cube);
+          window.addEventListener( 'resize',()=>{
+            this.onResize()
+          }, false );
+        },
 
-        let clicked = false;
-        let originalColor = cubeMaterial.color.clone();
-        const onClick = () => {
-        if (!clicked) {
-            clicked = true;
-            cubeMaterial.color = new THREE.Color(0x00ff00);
-            setTimeout(() => {
-            clicked = false;
-            cubeMaterial.color = originalColor;
-            }, 1000);
+        createScene: function(){
+          // -- 1 MISE EN PLACE la la SCENE ThreeJS  ----------------------------
+		      // - Creation de la SCENE -----------------------------          
+          this.scene = new THREE.Scene()
+          
+          // - Dessine les AXES ---------------------------------
+          const axesHelper = new THREE.AxesHelper(100)
+          // Ajouter les axes à la scène
+          this.scene.add(axesHelper)
+        },
+
+        createCamera: function(){
+          // -- 2- CRÉATION D'UNE CAMERA ----------------------------
+
+          // Il existe plusieurs caméra dans ThreeJS, ici PerspectiveCamera avec plusieurs paramètres :
+          // - Le premier attribut est le champ de vision :  La valeur est en degrés
+          // - Le second est le rapport hauteur/largeur
+          // - Les deux attributs suivants sont le plan de délimitation proche et éloigné .          
+          this.camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 1000 );
+          
+          // Positonner la caméra et 'regarder le centre de la scène
+          this.camera.position.x = 400
+          this.camera.position.y = 500
+          this.camera.position.z = 400
+
+
+          // La caméra regarde le centre de la scène
+          this.camera.lookAt(new THREE.Vector3(0,0,0))
+          // Ajouter la caméra à la scène
+          this.scene.add( this.camera )
+
+        },
+
+        createLight: function(){
+          // -- 3- CRÉATION D'UNE SOURCE LUMINEUSE ----------------------------
+          // Il existe plusieurs type de source lumineuse.         
+          
+          // Add 'spotlight' ainsi que du 'SpotLightHelper'...   
+           this.light = new THREE.SpotLight( 0xff0000, 1, 100 );
+          // Position de la source lumineuse
+          this.light.position.set( 100, 100, 1000 );
+          // Ajout de la source lumineuse à la scène
+          this.scene.add( this.light );
+          // Aide Helper pour voir la source lumineuse
+          const helperLight = new THREE.SpotLightHelper(this.light)
+          // Ajout de l'aide Helper à la scène
+          this.scene.add(helperLight)
+        },
+
+        createRenderer: function(){
+          // -- 4- CRÉATION D'UN RENDERER ----------------------------
+
+          // Définir la couleur de fond du rendu
+          this.renderer = new THREE.WebGLRenderer()
+          this.renderer.setClearColor(0xcccccc, 1, 0)
+          // Définir la taille du rendu
+          this.renderer.setSize(window.innerWidth, window.innerHeight)
+
+          // Ajout du rendu à la page HTML
+          document.body.appendChild(this.renderer.domElement)
+        },
+
+        addMesh: function(){
+          // -- 5 - CRÉATION D'UN MESH ------------------------------
+          const geometry = new THREE.BoxGeometry( 10, 9, 9 );
+          const recyclage = new THREE.MeshBasicMaterial( { color: 0xcccc00 } );  
+          const pasrecyclage = new THREE.MeshBasicMaterial( { color: 0x000000 } );
+          
+            this.cube1 = new THREE.Mesh( geometry, recyclage );
+            this.cube1.scale.x = 10;
+            this.cube1.scale.y = 15;
+            this.cube1.scale.z = 10;
+            this.cube1.position.x = +100;
+            this.cube1.position.y = 0;
+            this.cube1.position.z = -100;
+            this.scene.add( this.cube1 );
+
+            this.cube2 = new THREE.Mesh( geometry, pasrecyclage );
+            this.cube2.scale.x = 10;
+            this.cube2.scale.y = 15;
+            this.cube2.scale.z = 10;
+            this.cube2.position.x = -100;
+            this.cube2.position.y = 0;
+            this.cube2.position.z = +100;
+            this.scene.add( this.cube2 );
+            
+            const loader = new FontLoader();
+
+            loader.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {
+
+                const geometry = new TextGeometry( 'Vous avez', {
+                    font: font,
+                    size: 80,
+                    height: 5,
+                    curveSegments: 12,
+                    bevelEnabled: true,
+                    bevelThickness: 10,
+                    bevelSize: 8,
+                    bevelOffset: 0,
+                    bevelSegments: 5
+                } );
+            } );
+          },
+          
+          
+        removeGeometry: function(){
+          const allChildren = this.scene.children.lenght
+          for(let i =allChildren; i>1;i--){
+            this.scene.remove(this.scene.children[i])
+          }
+        },
+
+        creatOrbitCtrl: function(){
+          // -- 6- CONTROLE DE LA CAMERA AVEC ORBITCTRL ----------------------------
+          // OrbitControls permet de déplacer la caméra autour de la scène
+          this.control = new OrbitControls(this.camera, this.renderer.domElement)
+        },
+
+        createCtrl: function(){
+          // Ajouter des Ctrl pour modifier la position de du Mesh, la taille (scale), la rotation...
+          
+
+
+        },
+
+        addFog: function(){
+          // Ajoute un brouillard à la scène
+        },
+
+        animate: function(){
+          // -- 8- ANIMATION DE LA SCENE ---------------------------- 
+          // - Appel de la fonction animate() à chaque frame
+          requestAnimationFrame(()=>{this.animate()})
+          // - Mise à jour des contrôles de la caméra
+          this.control.update()
+          // - Mise à jour de la position du Mesh
+
+          // - Rendu de la scène
+          this.render()
+        },
+
+        render: function(){
+          // -- 7- RENDU DE LA SCENE ----------------------------
+          this.renderer.render(this.scene, this.camera)
+        },
+        
+        onResize: function(){
+          this.camera.aspect = window.innerWidth / window.innerHeight;
+          this.camera.updateProjectionMatrix();
+          this.renderer.setSize( window.innerWidth, window.innerHeight );
         }
-        };
-
-        // Add mouse events for dragging the cube
-        let mouseDown = false;
-        let mouseX = 0, mouseY = 0;
-        let cubeX = 0, cubeY = 0;
-        const onMouseDown = (event) => {
-        mouseDown = true;
-        mouseX = event.clientX;
-        mouseY = event.clientY;
-        cubeX = cube.position.x;
-        cubeY = cube.position.y;
-        };
-        const onMouseUp = (event) => {
-        mouseDown = false;
-        };
-        const onMouseMove = (event) => {
-        if (mouseDown) {
-            const deltaX = event.clientX - mouseX;
-            const deltaY = event.clientY - mouseY;
-            cube.position.x = cubeX + deltaX / 100;
-            cube.position.y = cubeY - deltaY / 100;
-        }
-        };
-        renderer.domElement.addEventListener('mousedown', onMouseDown);
-        renderer.domElement.addEventListener('mouseup', onMouseUp);
-        renderer.domElement.addEventListener('mousemove', onMouseMove);
-
-        // Render the scene
-        const animate = () => {
-        requestAnimationFrame(animate);
-        renderer.render(scene, camera);
-        cube.rotation.y += 0.01
-        };
-        animate();
+      }
 
 
-
-
+    App.init();
+    
     </script>
-</body>
-
+  </body>
 </html>
