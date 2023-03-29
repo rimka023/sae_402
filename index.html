@@ -20,8 +20,8 @@
         {
         "imports": {
             "three": "../node_modules/three/build/three.module.js",
-            "orbitcontrols": "../node_modules/three/examples/jsm/controls/OrbitControls.js",
-            "gui": "../node_modules/three/examples/jsm/libs/lil-gui.module.min.js"
+            "orbitcontrols": "../node_modules/three/examples/jsm/controls/OrbitControls.js"
+            
         }
         }
     </script>
@@ -29,10 +29,12 @@
     <script type="module">
         import * as THREE from 'three';
         import { OrbitControls } from 'orbitcontrols';
+        import { BoxLineGeometry } from '../node_modules/three/examples/jsm/geometries/BoxLineGeometry.js';
+        import { VRButton } from '../node_modules/three/examples/jsm/webxr/VRButton.js';
 
         // Create a Three.js scene
         const scene = new THREE.Scene();
-
+        let room;
         // Create a camera
         const camera = new THREE.PerspectiveCamera(
             75, // Field of view
@@ -40,7 +42,9 @@
             0.1, // Near clipping plane
             1000 // Far clipping plane
         );
-        camera.position.z = 5;
+        camera.position.x = 10
+        camera.position.y = 8
+        camera.position.z = 0
 
         // Create a renderer
         const renderer = new THREE.WebGLRenderer();
@@ -49,32 +53,42 @@
 
         // Create a cube
         const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+        const geometry = new THREE.BoxGeometry(2, 3, 2);
         const cubeMaterial = new THREE.MeshBasicMaterial({ color: Math.random() < 0.5 ? 0xff0000 : 0x0000ff });
-        const geometry = new THREE.BoxGeometry(10, 9, 9);
         const recyclage = new THREE.MeshBasicMaterial({ color: 0xcccc00 });
         const pasrecyclage = new THREE.MeshBasicMaterial({ color: 0x000000 });
         const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-        const cube1 = new THREE.Mesh(cubeGeometry, recyclage);
-        const cube2 = new THREE.Mesh(cubeGeometry, pasrecyclage);
+        const cube1 = new THREE.Mesh(geometry, recyclage);
+        const cube2 = new THREE.Mesh(geometry, pasrecyclage);
 
         scene.add(cube, cube2, cube1);
 
+        room = new THREE.LineSegments(
+					new BoxLineGeometry( 60, 60, 60, 5, 5, 5 ).translate( 0, 30, 0 ),
+					new THREE.LineBasicMaterial( { color: 0x808080 } )
+			    );
+
+
+		scene.add( room );
+
+        // Cube produit
+        cube.position.x = 5;
+        cube.position.y = 5;
+        cube.position.z = 0;
+
         // Cube recyclage
-        cube1.scale.x = 10;
-        cube1.scale.y = 15;
-        cube1.scale.z = 10;
-        cube1.position.x = 100;
-        cube1.position.y = 0;
-        cube1.position.z = -100;
+        cube1.position.x = 0;
+        cube1.position.y = 1.5;
+        cube1.position.z = -2;
 
         // Cube pas recyclable
-        cube2.scale.x = 10;
-        cube2.scale.y = 15;
-        cube2.scale.z = 10;
-        cube2.position.x = -100;
-        cube2.position.y = 0;
-        cube2.position.z = 100;
+        cube2.position.x = 0;
+        cube2.position.y = 1.5;
+        cube2.position.z = 2;
 
+        const axesHelper = new THREE.AxesHelper(100)
+          // Ajouter les axes à la scène
+        scene.add(axesHelper)
 
         let clicked = false;
         let originalColor = cubeMaterial.color.clone();
@@ -88,6 +102,8 @@
                 }, 1000);
             }
         };
+
+        const control = new OrbitControls(camera, renderer.domElement)
 
         // Add mouse events for dragging the cube
         // let mouseDown = false;
@@ -114,6 +130,7 @@
         // renderer.domElement.addEventListener('mousedown', onMouseDown);
         // renderer.domElement.addEventListener('mouseup', onMouseUp);
         // renderer.domElement.addEventListener('mousemove', onMouseMove);
+        
         renderer.setClearColor(0xcccccc, 1, 0)
 
         // Render the scene
