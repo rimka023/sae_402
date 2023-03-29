@@ -164,13 +164,13 @@
 				window.addEventListener( 'resize', onWindowResize, false );
 
                 const cubeGeometry = new THREE.BoxGeometry(.5, .5, .5);
-                const geometry = new THREE.BoxGeometry(1, 2, 1);
+                const sizecube = new THREE.BoxGeometry(1, 2, 1);
                 const cubeMaterial = new THREE.MeshBasicMaterial({ color: Math.random() < 0.5 ? 0xcccc00 : 0x000000 });
                 const recyclage = new THREE.MeshBasicMaterial({ color: 0xcccc00 });
                 const pasrecyclage = new THREE.MeshBasicMaterial({ color: 0x000000 });
                 const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-                const cube1 = new THREE.Mesh(geometry, recyclage);
-                const cube2 = new THREE.Mesh(geometry, pasrecyclage);
+                const cube1 = new THREE.Mesh(sizecube, recyclage);
+                const cube2 = new THREE.Mesh(sizecube, pasrecyclage);
 
                 scene.add(cube, cube2, cube1);
 
