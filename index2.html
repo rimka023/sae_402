@@ -97,22 +97,22 @@
 						metalness: 0.0
 					} );
 
-					const object = new THREE.Mesh( geometry, material );
+					const cube = new THREE.Mesh( geometry, material );
 
-					object.position.x = Math.random() * 4 - 2;
-					object.position.y = Math.random() * 2;
-					object.position.z = Math.random() * 4 - 2;
+					cube.position.x = Math.random() * 4 - 2;
+					cube.position.y = Math.random() * 2;
+					cube.position.z = Math.random() * 4 - 2;
 
-					object.rotation.x = Math.random() * 2 * Math.PI;
-					object.rotation.y = Math.random() * 2 * Math.PI;
-					object.rotation.z = Math.random() * 2 * Math.PI;
+					cube.rotation.x = Math.random() * 2 * Math.PI;
+					cube.rotation.y = Math.random() * 2 * Math.PI;
+					cube.rotation.z = Math.random() * 2 * Math.PI;
 
-					object.scale.setScalar( Math.random() + 0.5 );
+					cube.scale.setScalar( Math.random() + 0.5 );
 
-					object.castShadow = true;
-					object.receiveShadow = true;
+					cube.castShadow = true;
+					cube.receiveShadow = true;
 
-					group.add( object );
+					group.add( cube );
 
 				}
 
@@ -136,8 +136,6 @@
 				scene.add( controller1 );
 
 				controller2 = renderer.xr.getController( 1 );
-				controller2.addEventListener( 'selectstart', onSelectStart );
-				controller2.addEventListener( 'selectend', onSelectEnd );
 				scene.add( controller2 );
 
 				const controllerModelFactory = new XRControllerModelFactory();
@@ -277,7 +275,6 @@
 				cleanIntersected();
 
 				intersectObjects( controller1 );
-				intersectObjects( controller2 );
 
 				renderer.render( scene, camera );
 

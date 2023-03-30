@@ -31,7 +31,7 @@
 		import { VRButton } from './node_modules/three/examples/jsm/webxr/VRButton.js';
 		import { XRControllerModelFactory } from './node_modules/three/examples/jsm/webxr/XRControllerModelFactory.js';
 
-		let camera, scene, raycaster, renderer;
+		let camera, scene, raycaster, renderer, mouse;
 		let controller1, controller2;
 		let controllerGrip1, controllerGrip2;
 
@@ -47,14 +47,18 @@
 		animate();
 
 		function init() {
+			
+			const poubelleN = createPoubelleN(250, 0, 0);
+			const dechet = createDechet(0, 300, 0);
+			const poubelleJ = createPoubelleJ(-250, 0, 0);
 
 			scene = new THREE.Scene();
 			scene.background = new THREE.Color(0x505050);
 
 			camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-			camera.position.x = 10
-			camera.position.y = 8
-			camera.position.z = 15
+			camera.position.x = 0
+			camera.position.y = 1
+			camera.position.z = -18
 
 			room = new THREE.LineSegments(
 				new BoxLineGeometry(40, 10, 40, 10, 10, 10).translate(0, 5, 0),
@@ -81,6 +85,8 @@
 			scene.add(floor);
 
 			raycaster = new THREE.Raycaster();
+			mouse = new THREE.Vector2();
+
 
 			renderer = new THREE.WebGLRenderer({ antialias: true });
 			renderer.setPixelRatio(window.devicePixelRatio);
@@ -119,8 +125,8 @@
 			}
 
 			controller1 = renderer.xr.getController(0);
-			controller1.addEventListener('selectstart', onSelectStart);
-			controller1.addEventListener('selectend', onSelectEnd);
+			controller1.addEventListener('selectstart', onSelectStart1);
+			controller1.addEventListener('selectend', onSelectEnd1);
 			controller1.addEventListener('connected', function (event) {
 
 				this.add(buildController(event.data));
@@ -167,30 +173,22 @@
 
 			window.addEventListener('resize', onWindowResize, false);
 
-			const cubeGeometry = new THREE.BoxGeometry(.1, .1, .1);
-			const sizecube = new THREE.BoxGeometry(.5, 1, .5);
-			const cubeMaterial = new THREE.MeshBasicMaterial({ color: Math.random() < 0.5 ? 0xcccc00 : 0x000000 });
-			const recyclage = new THREE.MeshBasicMaterial({ color: 0xcccc00 });
-			const pasrecyclage = new THREE.MeshBasicMaterial({ color: 0x000000 });
-			const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-			const cube1 = new THREE.Mesh(sizecube, recyclage);
-			const cube2 = new THREE.Mesh(sizecube, pasrecyclage);
 
-			scene.add(cube, cube2, cube1);
-
-			cube.position.x = 0;
-			cube.position.y = 1.5;
-			cube.position.z = -19.88;
+			dechet.position.x = 0;
+			dechet.position.y = 1.5;
+			dechet.position.z = -19.88;
 
 			// Cube recyclage
-			cube1.position.x = .75;
-			cube1.position.y = .5;
-			cube1.position.z = -19.75;
+			poubelleJ.position.x = .75;
+			poubelleJ.position.y = .5;
+			poubelleJ.position.z = -19.75;
 
 			// Cube pas recyclable
-			cube2.position.x = -.75;
-			cube2.position.y = .5;
-			cube2.position.z = -19.75;
+			poubelleN.position.x = -.75;
+			poubelleN.position.y = .5;
+			poubelleN.position.z = -19.75;
+
+			scene.add(dechet, poubelleN, poubelleJ);
 
 			group = new THREE.Group();
 			scene.add( group );
@@ -204,7 +202,64 @@
 				controller1.add( line.clone() );
 				controller2.add( line.clone() );
 
+
+				const animatedechet = () => {
+					requestAnimationFrame(animate);
+					renderer.render(scene, camera);
+					dechet.rotation.y += 0.03
+				};
+				animatedechet();
+				onMouseClick();
+		
+				function onMouseClick(event) {
+					if (controller1.userData.isSelecting === true) {
+							event.preventDefault();
+
+							tempMatrix.identity().extractRotation(controller1.matrixWorld);
+
+							raycaster.ray.origin.setFromMatrixPosition(controller1.matrixWorld);
+							raycaster.ray.direction.set(0, 0, - 1).applyMatrix4(tempMatrix);
+
+							const intersects = raycaster.intersectObjects(controller);
+							if (intersects.length > 0) {
+								const selectedObject = intersects[0].object;
+								if (selectedObject === poubelleN || selectedObject === poubelleJ) {
+									scene.remove(dechet);
+									// selectedObject.add(dechet);
+									dechet.position.set(0, 0, 0);
+									scene.add(createDechet(0, 300, 0))
+									// scene.add(cube2)
+								}
+							}
+						}
+					}
+
 		}
+
+		function createDechet(x, y, z) {
+            const geometry = new THREE.BoxGeometry(.1, .1, .1);
+			const material = new THREE.MeshBasicMaterial({ color: Math.random() < 0.5 ? 0xcccc00 : 0x000000 });
+			const cube = new THREE.Mesh(geometry, material);
+			cube.position.set(x, y, z);
+			return cube;
+		}
+
+        function createPoubelleJ(x, y, z) {
+			const geometry = new THREE.BoxGeometry(.5, 1, .5);
+			const material = new THREE.MeshBasicMaterial({ color: 0xcccc00 });
+			const cube = new THREE.Mesh(geometry, material);
+			cube.position.set(x, y, z);
+			return cube;
+		}
+
+        function createPoubelleN(x, y, z) {
+			const geometry = new THREE.BoxGeometry(.5, 1, .5);
+			const material = new THREE.MeshBasicMaterial({ color: 0x000000 });
+			const cube = new THREE.Mesh(geometry, material);
+			cube.position.set(x, y, z);
+			return cube;
+		}
+
 
 		function buildController(data) {
 
@@ -241,7 +296,7 @@
 
 		}
 
-		function onSelectStart(event) {
+		function onSelectStart1(event) {
 
 			const controller = event.target;
 
@@ -261,7 +316,7 @@
 
 		}
 
-		function onSelectEnd(event) {
+		function onSelectEnd1(event) {
 
 			const controller = event.target;
 
@@ -332,6 +387,7 @@
 			renderer.setAnimationLoop(render);
 
 		}
+		
 
 		function render() {
 
