@@ -42,18 +42,10 @@
 		const raycaster = new THREE.Raycaster();
 		const mouse = new THREE.Vector2();
 
-		// render the scene
-		renderer.render(scene, camera);
-
-		// animate the scene
-		function animate() {
-			requestAnimationFrame(animate);
-			renderer.render(scene, camera);
-		}
-
+        
 		// create a function to create a cube
 		function createCube(x, y, z) {
-			const geometry = new THREE.BoxGeometry();
+            const geometry = new THREE.BoxGeometry();
 			const material = new THREE.MeshBasicMaterial({ color: Math.random() < 0.5 ? 0xff0000 : 0x0000ff });
 			const cube = new THREE.Mesh(geometry, material);
 			cube.position.set(x, y, z);
@@ -69,7 +61,7 @@
 		}
 
         function createPoubelleR(x, y, z) {
-			const geometry = new THREE.BoxGeometry();
+            const geometry = new THREE.BoxGeometry();
 			const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
 			const cube = new THREE.Mesh(geometry, material);
 			cube.position.set(x, y, z);
@@ -78,7 +70,7 @@
 
 		// add an event listener for clicks
 		window.addEventListener('click', onMouseClick);
-
+        
 		// function to handle clicks
 		function onMouseClick(event) {
 			event.preventDefault();
@@ -87,7 +79,7 @@
 			raycaster.setFromCamera(mouse, camera);
 			const intersects = raycaster.intersectObjects(scene.children, true);
 			if (intersects.length > 0) {
-				const selectedObject = intersects[0].object;
+                const selectedObject = intersects[0].object;
 				if (selectedObject === cube1 || selectedObject === cube3) {
 					scene.remove(cube2);
 					selectedObject.add(cube2);
@@ -97,8 +89,16 @@
 				}
 			}
 		}
+        
+        // render the scene
+        renderer.render(scene, camera);
 
+        // animate the scene
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+        }
 		animate();
-	</script>
+        </script>
 </body>
 </html>

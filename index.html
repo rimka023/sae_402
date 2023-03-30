@@ -50,41 +50,38 @@
         document.body.appendChild(renderer.domElement);
 
         // Create a cube
-        const cubeGeometry = new THREE.BoxGeometry(10, 10, 10);
-        const geometry = new THREE.BoxGeometry(10, 15, 10);
-        const cubeMaterial = new THREE.MeshBasicMaterial({ color: Math.random() < 0.5 ? 0xff0000 : 0x0000ff });
-        const recyclage = new THREE.MeshBasicMaterial({ color: 0xcccc00 });
-        const pasrecyclage = new THREE.MeshBasicMaterial({ color: 0x000000 });
-        const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-        const cube1 = new THREE.Mesh(geometry, recyclage);
-        const cube2 = new THREE.Mesh(geometry, pasrecyclage);
+		const poubelleN = createPoubelleN(250, 0, 0);
+		const dechet = createDechet(0, 300, 0);
+		const poubelleJ = createPoubelleJ(-250, 0, 0);
 
-        scene.add(cube, cube2, cube1);
+        scene.add(poubelleN);
+		scene.add(dechet);
+		scene.add(poubelleJ);
 
 
         // Cube produit
-        cube.scale.x = 3;
-        cube.scale.y = 3;
-        cube.scale.z = 3;
-        cube.position.x = 0;
-        cube.position.y = 300;
-        cube.position.z = 0;
+        dechet.scale.x = 3;
+        dechet.scale.y = 3;
+        dechet.scale.z = 3;
+        // cube.position.x = 0;
+        // cube.position.y = 300;
+        // cube.position.z = 0;
 
         // Cube recyclage
-        cube1.scale.x = 10;
-        cube1.scale.y = 15;
-        cube1.scale.z = 10;
-        cube1.position.x = -250;
-        cube1.position.y = 0;
-        cube1.position.z = 0;
+        poubelleJ.scale.x = 10;
+        poubelleJ.scale.y = 15;
+        poubelleJ.scale.z = 10;
+        // cube1.position.x = -250;
+        // cube1.position.y = 0;
+        // cube1.position.z = 0;
 
         // Cube pas recyclable
-        cube2.scale.x = 10;
-        cube2.scale.y = 15;
-        cube2.scale.z = 10;
-        cube2.position.x = 250;
-        cube2.position.y = 0;
-        cube2.position.z = 0;
+        poubelleN.scale.x = 10;
+        poubelleN.scale.y = 15;
+        poubelleN.scale.z = 10;
+        // cube2.position.x = 250;
+        // cube2.position.y = 0;
+        // cube2.position.z = 0;
 
         const axesHelper = new THREE.AxesHelper(100);
           // Ajouter les axes à la scène
@@ -92,9 +89,56 @@
 
         // const control = new OrbitControls(camera, renderer.domElement)
 
+        // create a raycaster to detect clicks on objects
+		const raycaster = new THREE.Raycaster();
+		const mouse = new THREE.Vector2();
+
+		// // add an event listener for clicks
+		// window.addEventListener('click', onMouseClick);
+
+		// // function to handle clicks
+		// function onMouseClick(event) {
+		// 	event.preventDefault();
+		// 	mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+		// 	mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+		// 	raycaster.setFromCamera(mouse, camera);
+		// 	const intersects = raycaster.intersectObjects(scene.children, true);
+		// 	if (intersects.length > 0) {
+		// 		const selectedObject = intersects[0].object;
+		// 		selectedObject.material.color.set(0x00ff00); // change color to green
+		// 		setTimeout(() => {
+		// 			selectedObject.material.color.set(0xff0000); // change color back to red after 3 seconds
+		// 		}, 1000);
+		// 	}
+		// }
+
+        function createDechet(x, y, z) {
+            const geometry = new THREE.BoxGeometry(10, 10, 10);
+			const material = new THREE.MeshBasicMaterial({ color: Math.random() < 0.5 ? 0xcccc00 : 0x000000 });
+			const cube = new THREE.Mesh(geometry, material);
+			cube.position.set(x, y, z);
+			return cube;
+		}
+
+        function createPoubelleJ(x, y, z) {
+			const geometry = new THREE.BoxGeometry(10, 15, 10);
+			const material = new THREE.MeshBasicMaterial({ color: 0xcccc00 });
+			const cube = new THREE.Mesh(geometry, material);
+			cube.position.set(x, y, z);
+			return cube;
+		}
+
+        function createPoubelleN(x, y, z) {
+			const geometry = new THREE.BoxGeometry(10, 15, 10);
+			const material = new THREE.MeshBasicMaterial({ color: 0x000000 });
+			const cube = new THREE.Mesh(geometry, material);
+			cube.position.set(x, y, z);
+			return cube;
+		}
+
 		// add an event listener for clicks
 		window.addEventListener('click', onMouseClick);
-
+        
 		// function to handle clicks
 		function onMouseClick(event) {
 			event.preventDefault();
@@ -103,11 +147,14 @@
 			raycaster.setFromCamera(mouse, camera);
 			const intersects = raycaster.intersectObjects(scene.children, true);
 			if (intersects.length > 0) {
-				const selectedObject = intersects[0].object;
-				selectedObject.material.color.set(0x00ff00); // change color to green
-				setTimeout(() => {
-					selectedObject.material.color.set(0xff0000); // change color back to red after 3 seconds
-				}, 1000);
+                const selectedObject = intersects[0].object;
+				if (selectedObject === poubelleN || selectedObject === poubelleJ) {
+					scene.remove(dechet);
+					// selectedObject.add(dechet);
+					dechet.position.set(0, 0, 0);
+                    scene.add(createDechet(0, 300, 0))
+                    // scene.add(cube2)
+				}
 			}
 		}
         
@@ -117,7 +164,7 @@
         const animate = () => {
             requestAnimationFrame(animate);
             renderer.render(scene, camera);
-            cube.rotation.y += 0.03
+            dechet.rotation.y += 0.03
         };
         animate();
 
