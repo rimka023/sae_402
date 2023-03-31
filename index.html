@@ -44,6 +44,8 @@
         camera.position.z = 800;
         // camera.position.set(600, 400, 0);
 
+        let compteur = 0;
+
         // Create a renderer
         const renderer = new THREE.WebGLRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
@@ -173,7 +175,9 @@
                     const dechet2 = createDechet2(0, 300, 0);
                     scene.add(dechet2);
                     alert('Bien joué');
-                    dechet = dechet2
+                    dechet = dechet2;
+                    compteur += 1;
+                    console.log(compteur);
                 }
 
                 else if (selectedObject === poubelleJ && dechet.material.color.r > 0) {
@@ -183,11 +187,17 @@
                     const dechet2 = createDechet2(0, 300, 0);
                     scene.add(dechet2);
                     alert('Bien joué');
-                    dechet = dechet2
+                    dechet = dechet2;
+                    compteur += 1;
+                    console.log(compteur);
 			    }
 
                 else{
-                    alert("Ce déchet ne va pas dans cette poubelle")
+                    scene.remove(dechet);
+                    const dechet2 = createDechet2(0, 300, 0);
+                    scene.add(dechet2);
+                    alert("Ce n'est pas la bonne poubelle voyons !");
+                    dechet = dechet2;
                 }
             }
 		}
