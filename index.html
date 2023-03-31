@@ -51,7 +51,7 @@
 
         // Create a cube
 		const poubelleN = createPoubelleN(250, 0, 0);
-		const dechet = createDechet(0, 300, 0);
+		let dechet = createDechet(0, 300, 0);
 		const poubelleJ = createPoubelleJ(-250, 0, 0);
 
         scene.add(poubelleN);
@@ -116,6 +116,15 @@
             const geometry = new THREE.BoxGeometry(10, 10, 10);
 			const material = new THREE.MeshBasicMaterial({ color: Math.random() < 0.5 ? 0xcccc00 : 0x000000 });
 			const cube = new THREE.Mesh(geometry, material);
+            console.log(material);
+            cube.color = material.color
+			cube.position.set(x, y, z);
+			return cube;
+		}
+        function createDechet2(x, y, z) {
+            const geometry = new THREE.BoxGeometry(30, 30, 30);
+			const material = new THREE.MeshBasicMaterial({ color: Math.random() < 0.5 ? 0xcccc00 : 0x000000 });
+			const cube = new THREE.Mesh(geometry, material);
 			cube.position.set(x, y, z);
 			return cube;
 		}
@@ -148,17 +157,42 @@
 			const intersects = raycaster.intersectObjects(scene.children, true);
 			if (intersects.length > 0) {
                 const selectedObject = intersects[0].object;
-				if (selectedObject === poubelleN || selectedObject === poubelleJ) {
+				// if (selectedObject === poubelleN || selectedObject === poubelleJ) {
+				// 	scene.remove(dechet);
+				// 	// selectedObject.add(dechet);
+				// 	// dechet.position.set(0, 0, 0);
+                //     const dechet2 = createDechet2(0, 300, 0);
+                //     scene.add(dechet2);
+                //     // scene.add(cube2)
+				// }
+                // console.log(dechet.material)
+				if (selectedObject === poubelleN && dechet.material.color.r == 0) {
 					scene.remove(dechet);
 					// selectedObject.add(dechet);
-					dechet.position.set(0, 0, 0);
-                    scene.add(createDechet(0, 300, 0))
-                    // scene.add(cube2)
-				}
-			}
+					// dechet.position.set(0, 0, 0);
+                    const dechet2 = createDechet2(0, 300, 0);
+                    scene.add(dechet2);
+                    alert('Bien joué');
+                    dechet = dechet2
+                }
+
+                else if (selectedObject === poubelleJ && dechet.material.color.r > 0) {
+					scene.remove(dechet);
+					// selectedObject.add(dechet);
+					// dechet.position.set(0, 0, 0);
+                    const dechet2 = createDechet2(0, 300, 0);
+                    scene.add(dechet2);
+                    alert('Bien joué');
+                    dechet = dechet2
+			    }
+
+                else{
+                    alert("Ce déchet ne va pas dans cette poubelle")
+                }
+            }
 		}
         
-        renderer.setClearColor(0xcccccc, 1, 0);
+        renderer.setClearColor(0xffffff, 1, 0);
 
         // Render the scene
         const animate = () => {
