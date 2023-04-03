@@ -47,7 +47,7 @@
 		animate();
 
 		function init() {
-			
+
 			const poubelleN = createPoubelleN(250, 0, 0);
 			const dechet = createDechet(0, 300, 0);
 			const poubelleJ = createPoubelleJ(-250, 0, 0);
@@ -191,60 +191,60 @@
 			scene.add(dechet, poubelleN, poubelleJ);
 
 			group = new THREE.Group();
-			scene.add( group );
+			scene.add(group);
 
-			const geometry = new THREE.BufferGeometry().setFromPoints( [ new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 0, - 1 ) ] );
+			const geometry = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, - 1)]);
 
-			const line = new THREE.Line( geometry );
-				line.name = 'line';
-				line.scale.z = 5;
+			const line = new THREE.Line(geometry);
+			line.name = 'line';
+			line.scale.z = 5;
 
-				controller1.add( line.clone() );
-				controller2.add( line.clone() );
+			controller1.add(line.clone());
+			controller2.add(line.clone());
 
 
-				const animatedechet = () => {
-					requestAnimationFrame(animate);
-					renderer.render(scene, camera);
-					dechet.rotation.y += 0.03
-				};
-				animatedechet();
-				onMouseClick();
-		
-				function onMouseClick(event) {
-					if (controller1.userData.isSelecting === true) {
-							event.preventDefault();
+			const animatedechet = () => {
+				requestAnimationFrame(animate);
+				renderer.render(scene, camera);
+				dechet.rotation.y += 0.03
+			};
+			animatedechet();
+			onMouseClick();
 
-							tempMatrix.identity().extractRotation(controller1.matrixWorld);
+			function onMouseClick(event) {
+				if (controller1.userData.isSelecting === true) {
+					event.preventDefault();
 
-							raycaster.ray.origin.setFromMatrixPosition(controller1.matrixWorld);
-							raycaster.ray.direction.set(0, 0, - 1).applyMatrix4(tempMatrix);
+					tempMatrix.identity().extractRotation(controller1.matrixWorld);
 
-							const intersects = raycaster.intersectObjects(controller);
-							if (intersects.length > 0) {
-								const selectedObject = intersects[0].object;
-								if (selectedObject === poubelleN || selectedObject === poubelleJ) {
-									scene.remove(dechet);
-									// selectedObject.add(dechet);
-									dechet.position.set(0, 0, 0);
-									scene.add(createDechet(0, 300, 0))
-									// scene.add(cube2)
-								}
-							}
+					raycaster.ray.origin.setFromMatrixPosition(controller1.matrixWorld);
+					raycaster.ray.direction.set(0, 0, - 1).applyMatrix4(tempMatrix);
+
+					const intersects = raycaster.intersectObjects(controller);
+					if (intersects.length > 0) {
+						const selectedObject = intersects[0].object;
+						if (selectedObject === poubelleN || selectedObject === poubelleJ) {
+							scene.remove(dechet);
+							// selectedObject.add(dechet);
+							dechet.position.set(0, 0, 0);
+							scene.add(createDechet(0, 300, 0))
+							// scene.add(cube2)
 						}
 					}
+				}
+			}
 
 		}
 
 		function createDechet(x, y, z) {
-            const geometry = new THREE.BoxGeometry(.1, .1, .1);
+			const geometry = new THREE.BoxGeometry(.1, .1, .1);
 			const material = new THREE.MeshBasicMaterial({ color: Math.random() < 0.5 ? 0xcccc00 : 0x000000 });
 			const cube = new THREE.Mesh(geometry, material);
 			cube.position.set(x, y, z);
 			return cube;
 		}
 
-        function createPoubelleJ(x, y, z) {
+		function createPoubelleJ(x, y, z) {
 			const geometry = new THREE.BoxGeometry(.5, 1, .5);
 			const material = new THREE.MeshBasicMaterial({ color: 0xcccc00 });
 			const cube = new THREE.Mesh(geometry, material);
@@ -252,7 +252,7 @@
 			return cube;
 		}
 
-        function createPoubelleN(x, y, z) {
+		function createPoubelleN(x, y, z) {
 			const geometry = new THREE.BoxGeometry(.5, 1, .5);
 			const material = new THREE.MeshBasicMaterial({ color: 0x000000 });
 			const cube = new THREE.Mesh(geometry, material);
@@ -302,17 +302,17 @@
 
 			const intersections = getIntersections(controller);
 
-			if (intersections.length > 0) {
-
-				const intersection = intersections[0]
-
-				const object = intersection.object;
-				object.material.emissive.b = 1;
-				controller.attach(object);
-
-				controller.userData.selected = object;
-
-			}
+			const intersects = raycaster.intersectObjects(controller);
+					if (intersects.length > 0) {
+						const selectedObject = intersects[0].object;
+						if (selectedObject === poubelleN || selectedObject === poubelleJ) {
+							scene.remove(dechet);
+							// selectedObject.add(dechet);
+							dechet.position.set(0, 0, 0);
+							scene.add(createDechet(0, 300, 0))
+							// scene.add(cube2)
+						}
+					}
 
 		}
 
@@ -387,7 +387,7 @@
 			renderer.setAnimationLoop(render);
 
 		}
-		
+
 
 		function render() {
 
