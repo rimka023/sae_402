@@ -67,15 +67,6 @@
 		scene.add(dechet);
 		scene.add(poubelleJ);
         
-        //-----FOND-----------
-			const loader = new THREE.TextureLoader();
-			const texture = loader.load('./fond.exr');
-			const cubeTexture = new THREE.CubeTextureLoader()
-			.setPath('./fond.exr')
-			.load(['posx.jpg', 'negx.jpg', 'posy.jpg', 'negy.jpg', 'posz.jpg', 'negz.jpg']);
-			scene.background = cubeTexture;
-			cubeTexture.opacity = 0.5;
-			cubeTexture.needsUpdate = true;
 
         // Cube produit
         dechet.scale.x = 3;
