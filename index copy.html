@@ -35,6 +35,8 @@
     <script type="module">
         import * as THREE from 'three';
         import { OrbitControls } from 'orbitcontrols';
+        import { HDRCubeTextureLoader } from '../node_modules/three/examples/jsm/loaders/HDRCubeTextureLoader.js';
+
 
         // Create a Three.js scene
         const scene = new THREE.Scene();
@@ -67,6 +69,23 @@
 		scene.add(dechet);
 		scene.add(poubelleJ);
         
+        //-----FOND-----------
+        const loader = new THREE.HDRCubeTextureLoader();
+        const hdrCubeMap = loader.load('fond.hdr', () => {
+        // Callback function
+        const pmremGenerator = new THREE.PMREMGenerator(renderer);
+        pmremGenerator.compileEquirectangularShader();
+        const hdrCubeRenderTarget = pmremGenerator.fromEquirectangular(hdrCubeMap);
+        scene.background = hdrCubeRenderTarget.texture;
+        pmremGenerator.dispose();
+        });
+
+        const pmremGenerator = new THREE.PMREMGenerator(renderer);
+        pmremGenerator.compileEquirectangularShader();
+        const hdrCubeRenderTarget = pmremGenerator.fromEquirectangular(hdrCubeMap);
+
+        scene.background = hdrCubeRenderTarget.texture;
+
 
         // Cube produit
         dechet.scale.x = 3;
