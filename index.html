@@ -47,11 +47,12 @@
 		animate();
 
 		function init() {
-
+			//-----poubelle-----------
 			const poubelleN = createPoubelleN(250, 0, 0);
 			const dechet = createDechet(0, 300, 0);
 			const poubelleJ = createPoubelleJ(-250, 0, 0);
-
+			
+			
 			scene = new THREE.Scene();
 			scene.background = new THREE.Color(0x505050);
 
@@ -98,6 +99,8 @@
 
 			document.body.appendChild(renderer.domElement);
 			document.body.appendChild(VRButton.createButton(renderer));
+			
+			
 
 			// controllers
 
