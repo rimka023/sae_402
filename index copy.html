@@ -5,6 +5,7 @@
     <meta charset="utf-8" />
     <title>Three.js Cube</title>
         <h1 id="point" class="point">Point : 0</h1>
+        
     <style>
         body {
             margin: 0;
@@ -183,7 +184,7 @@
                     alert('Bien joué');
                     dechet = dechet2;
                     compteur += 1;
-                    document.getElementById('point').innerHTML = 'Point : ' + compteur ;
+                    document.getElementById('point').innerHTML = 'Points : ' + compteur ;
                     console.log(compteur);
                 }
 
@@ -196,7 +197,7 @@
                     alert('Bien joué');
                     dechet = dechet2;
                     compteur += 1;
-                    document.getElementById('point').innerHTML = 'Point : ' + compteur ;
+                    document.getElementById('point').innerHTML = 'Points : ' + compteur ;
 
                     console.log(compteur);
 			    }
@@ -205,7 +206,6 @@
                     scene.remove(dechet);
                     const dechet2 = createDechet2(0, 300, 0);
                     scene.add(dechet2);
-                    alert("Ce n'est pas la bonne poubelle voyons !");
                     dechet = dechet2;
                 }
             }
