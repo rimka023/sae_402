@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Three.js Cube</title>
+        <h1 id="point" class="point">Point : 0</h1>
+        
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        .point{
+            position: absolute;
+            font-size: 48px;
+            padding-left: 2rem;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.131.2/build/three.min.js"></script>
+    <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+    <script src="https://cdn.rawgit.com/mrdoob/three.js/r128/examples/js/loaders/FBXLoader.js"></script>
+    <script type="importmap">
+        {
+        "imports": {
+            "three": "../node_modules/three/build/three.module.js",
+            "orbitcontrols": "../node_modules/three/examples/jsm/controls/OrbitControls.js"
+        }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { GLTFLoader } from '../node_modules/three/addons/loaders/GLTFLoader.js';
+        
+        const loader = new GLTFLoader();
+
+        // Charger l'objet GLB
+        loader.load('./assets/trash_can.glb', function (gltf) {
+
+            // Ajouter l'objet à la scène
+            var object = gltf.scene;
+            scene.add(object);
+
+            // Mettre à jour la scène
+            renderer.render(scene, camera);
+
+        }, undefined, function (error) {
+
+            console.error(error);
+
+        })
+
+
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>
