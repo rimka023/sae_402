@@ -57,6 +57,8 @@
 
 
 
+
+
 // Initialize Three.js scene, camera, renderer, and controls
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -66,7 +68,7 @@ document.body.appendChild(renderer.domElement);
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
 
 // Load GLTF models with GLTFLoader and store object data in an array
-const loader = new THREE.GLTFLoader();
+// const loader = new THREE.GLTFLoader();
 const objects = [];
 
 loader.load('model1.gltf', function (gltf) {

@@ -115,6 +115,135 @@
             scene.add(objectPoubelleJ);
         })
 
+        //-------Object----------------
+
+        var loaderObjects = new GLTFLoader();
+        var objects = [];
+
+        loaderObjects.load(
+        // URL du document GLB
+        './assets/burger.glb',
+
+        // Fonction de rappel appelée lorsque le chargement est terminé
+        function(gltf) {
+            var object = gltf.scene;
+            object.name = 'Burger';
+            object.recyclable = 'No';
+            object.position.y = 2.5;
+            object.scale.y = .25;
+            object.scale.x = .25;      
+            object.scale.z = .25; 
+            scene.add(object);
+            objects.push(object);
+        }
+        );
+
+        loaderObjects.load(
+            // URL du document GLB
+            './assets/plastic_bottle.glb',
+
+            // Fonction de rappel appelée lorsque le chargement est terminé
+            function(gltf) {
+                var object = gltf.scene;
+                object.name = 'Plastic bottle';
+                object.recyclable = 'Yes';
+                object.position.y = 2.5;  
+                object.scale.y = .05;
+                object.scale.x = .07;      
+                object.scale.z = .07;  
+                scene.add(object);
+                objects.push(object);
+            }
+        );
+
+        loaderObjects.load(
+            // URL du document GLB
+            './assets/teeth_brush.glb',
+
+            // Fonction de rappel appelée lorsque le chargement est terminé
+            function(gltf) {
+                var object = gltf.scene;
+                object.name = 'Teeth brush';
+                object.recyclable = 'No';
+                object.position.y = 2.5;
+                object.position.z = -.15;
+                object.position.x = -.12;
+                object.scale.y = .015;
+                object.scale.x = .025;      
+                object.scale.z = .025;
+                scene.add(object);
+                objects.push(object);
+            }
+        );
+        loaderObjects.load(
+            // URL du document GLB
+            './assets/slice_of_pizza.glb',
+
+            // Fonction de rappel appelée lorsque le chargement est terminé
+            function(gltf) {
+                var object = gltf.scene;
+                object.name = 'Pizza';
+                object.recyclable = 'No';
+                object.position.y = 2.5;
+                // object.position.z = -.15;
+                // object.position.x = -.12;
+                object.scale.y = 5;
+                object.scale.x = 5;      
+                object.scale.z = 5;
+                scene.add(object);
+                objects.push(object);
+            }
+        );
+        loaderObjects.load(
+            // URL du document GLB
+            './assets/food_can_415g.glb',
+
+            // Fonction de rappel appelée lorsque le chargement est terminé
+            function(gltf) {
+                var object = gltf.scene;
+                object.name = 'Food can';
+                object.recyclable = 'Yes';
+                object.position.y = 2.5;
+                // object.position.z = -.15;
+                // object.position.x = -.12;
+                object.scale.y = 1.5;
+                object.scale.x = 1.5;      
+                object.scale.z = 1.5;
+                scene.add(object);
+                objects.push(object);
+            }
+        );
+        loaderObjects.load(
+            // URL du document GLB
+            './assets/aerosol_en_partes.glb',
+
+            // Fonction de rappel appelée lorsque le chargement est terminé
+            function(gltf) {
+                var object = gltf.scene;
+                object.name = 'Aerosol';
+                object.recyclable = 'Yes';
+                object.position.y = 2.5;
+                scene.add(object);
+                objects.push(object);
+            }
+        );
+        loaderObjects.load(
+            // URL du document GLB
+            './assets/aluminum_tray.glb',
+
+            // Fonction de rappel appelée lorsque le chargement est terminé
+            function(gltf) {
+                var object = gltf.scene;
+                object.name = 'Aeluminum tray';
+                object.recyclable = 'Yes';
+                object.position.y = 2.5;
+                object.scale.y = .2;
+                object.scale.x = .2;      
+                object.scale.z = .2;
+                scene.add(object);
+                objects.push(object);
+            }
+        );
 
         var ambientLight = new THREE.AmbientLight(0xffffff, 7);
         scene.add(ambientLight);
