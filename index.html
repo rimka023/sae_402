@@ -47,21 +47,23 @@
         // camera.position.set(600, 400, 0);
 
         // Create the text
-        function createText() {
-            const textGeometry = new TextGeometry('Hello World!', {
-                font: new FontLoader().load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json')
-                // size: 0.5,
-                // height: 0.1,
-                // curveSegments: 12,
-                // bevelEnabled: true,
-                // bevelThickness: 0.05,
-                // bevelSize: 0.05,
-                // bevelOffset: 0,
-                // bevelSegments: 5
+        function createText(text) {
+            let textGeometry = new TextGeometry(text, {
+                font: new FontLoader().load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json'),
+                size: 70,
+                height: 20,
+                curveSegments: 4,
+                bevelEnabled: false,
+                bevelThickness: 2,
+                bevelSize: 1.5
             });
-            const textMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+            textGeometry.computeBoundingBox();
+            const textMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
             let textMesh = new THREE.Mesh(textGeometry, textMaterial);
-            textMesh.position.set(0, 2, 0);
+            textMesh.position.set(0, 200, 0);
+            textMesh.scale.x = 100;
+            textMesh.scale.y = 100;
+            textMesh.scale.z = 100;
             scene.add(textMesh);
         }
 
@@ -86,25 +88,16 @@
         dechet.scale.x = 3;
         dechet.scale.y = 3;
         dechet.scale.z = 3;
-        // cube.position.x = 0;
-        // cube.position.y = 300;
-        // cube.position.z = 0;
 
         // Cube recyclage
         poubelleJ.scale.x = 10;
         poubelleJ.scale.y = 15;
         poubelleJ.scale.z = 10;
-        // cube1.position.x = -250;
-        // cube1.position.y = 0;
-        // cube1.position.z = 0;
 
         // Cube pas recyclable
         poubelleN.scale.x = 10;
         poubelleN.scale.y = 15;
         poubelleN.scale.z = 10;
-        // cube2.position.x = 250;
-        // cube2.position.y = 0;
-        // cube2.position.z = 0;
 
         const axesHelper = new THREE.AxesHelper(100);
           // Ajouter les axes à la scène
@@ -115,25 +108,6 @@
         // create a raycaster to detect clicks on objects
 		const raycaster = new THREE.Raycaster();
 		const mouse = new THREE.Vector2();
-
-		// // add an event listener for clicks
-		// window.addEventListener('click', onMouseClick);
-
-		// // function to handle clicks
-		// function onMouseClick(event) {
-		// 	event.preventDefault();
-		// 	mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-		// 	mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-		// 	raycaster.setFromCamera(mouse, camera);
-		// 	const intersects = raycaster.intersectObjects(scene.children, true);
-		// 	if (intersects.length > 0) {
-		// 		const selectedObject = intersects[0].object;
-		// 		selectedObject.material.color.set(0x00ff00); // change color to green
-		// 		setTimeout(() => {
-		// 			selectedObject.material.color.set(0xff0000); // change color back to red after 3 seconds
-		// 		}, 1000);
-		// 	}
-		// }
 
         function createDechet(x, y, z) {
             const geometry = new THREE.BoxGeometry(10, 10, 10);
@@ -180,15 +154,6 @@
 			const intersects = raycaster.intersectObjects(scene.children, true);
 			if (intersects.length > 0) {
                 const selectedObject = intersects[0].object;
-				// if (selectedObject === poubelleN || selectedObject === poubelleJ) {
-				// 	scene.remove(dechet);
-				// 	// selectedObject.add(dechet);
-				// 	// dechet.position.set(0, 0, 0);
-                //     const dechet2 = createDechet2(0, 300, 0);
-                //     scene.add(dechet2);
-                //     // scene.add(cube2)
-				// }
-                // console.log(dechet.material)
 				if (selectedObject === poubelleN && dechet.material.color.r == 0) {
 					scene.remove(dechet);
 					// selectedObject.add(dechet);
@@ -196,7 +161,7 @@
                     const dechet2 = createDechet2(0, 300, 0);
                     scene.add(dechet2);
                     // alert('Bien joué');
-                    createText();
+                    createText("Ce déchet n'est pas recyclable, tu as raison");
                     dechet = dechet2;
                     compteur += 1;
                     console.log(compteur);
@@ -209,7 +174,7 @@
                     const dechet2 = createDechet2(0, 300, 0);
                     scene.add(dechet2);
                     // alert('Bien joué');
-                    createText();
+                    createText("Ce déchet est bien recyclable");
                     dechet = dechet2;
                     compteur += 1;
                     console.log(compteur);
