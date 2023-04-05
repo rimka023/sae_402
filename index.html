@@ -47,25 +47,57 @@
         // camera.position.set(600, 400, 0);
 
         // Create the text
-        function createText(text) {
-            let textGeometry = new TextGeometry(text, {
-                font: new FontLoader().load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json'),
-                size: 70,
-                height: 20,
-                curveSegments: 4,
-                bevelEnabled: false,
-                bevelThickness: 2,
-                bevelSize: 1.5
+        // function createText(text) {
+        //     let textGeometry = new TextGeometry(text, {
+        //         font: new FontLoader().load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json'),
+        //         size: 70,
+        //         height: 20,
+        //         // curveSegments: 4,
+        //         // bevelEnabled: false,
+        //         // bevelThickness: 2,
+        //         // bevelSize: 1.5
+
+        //         textGeometry.computeBoundingBox();
+        //         const textMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+        //         let textMesh = new THREE.Mesh(textGeometry, textMaterial);
+        //         textMesh.position.set(0, 200, 0);
+        //         textMesh.scale.x = 100;
+        //         textMesh.scale.y = 100;
+        //         textMesh.scale.z = 100;
+        //         scene.add(textMesh);
+        //     });
+        // }
+
+        // function createText(){
+        //     const loader = new FontLoader();
+        //     loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json')
+        // }
+
+        function createText(text, x, y, z, color) {
+            const fontLoader = new FontLoader();
+            fontLoader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', function (font) {
+                const geometry = new TextGeometry(text, {
+                    font: font,
+                    size: 20,
+                    height: 5
+                });
+                const material = new THREE.MeshBasicMaterial({ color: color });
+                const textMesh = new THREE.Mesh(geometry, material);
+                textMesh.position.set(x, y, z);
+                textMesh.name = text; // set the name of the mesh to the text string
+                scene.add(textMesh);
+                textMeshes.push(textMesh);
             });
-            textGeometry.computeBoundingBox();
-            const textMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-            let textMesh = new THREE.Mesh(textGeometry, textMaterial);
-            textMesh.position.set(0, 200, 0);
-            textMesh.scale.x = 100;
-            textMesh.scale.y = 100;
-            textMesh.scale.z = 100;
-            scene.add(textMesh);
+
         }
+
+        // Define the removeText function
+        function removeText() {
+            let textMesh = textMeshes.pop();
+            scene.remove(textMesh);
+        }
+
+        let textMeshes = [];
 
         let compteur = 0;
 
@@ -113,7 +145,6 @@
             const geometry = new THREE.BoxGeometry(10, 10, 10);
 			const material = new THREE.MeshBasicMaterial({ color: Math.random() < 0.5 ? 0xcccc00 : 0x000000 });
 			const cube = new THREE.Mesh(geometry, material);
-            console.log(material);
             cube.color = material.color
 			cube.position.set(x, y, z);
 			return cube;
@@ -156,12 +187,14 @@
                 const selectedObject = intersects[0].object;
 				if (selectedObject === poubelleN && dechet.material.color.r == 0) {
 					scene.remove(dechet);
+                    removeText();
+
 					// selectedObject.add(dechet);
 					// dechet.position.set(0, 0, 0);
                     const dechet2 = createDechet2(0, 300, 0);
                     scene.add(dechet2);
                     // alert('Bien joué');
-                    createText("Ce déchet n'est pas recyclable, tu as raison");
+                    createText("Ce dechet va bien dans la poubelle noire, il n'est pas recyclable", -380, 200, 0, 0x000000);
                     dechet = dechet2;
                     compteur += 1;
                     console.log(compteur);
@@ -169,12 +202,16 @@
 
                 else if (selectedObject === poubelleJ && dechet.material.color.r > 0) {
 					scene.remove(dechet);
+                    scene.remove(THREE.Mesh.name)
+                    removeText();
+
 					// selectedObject.add(dechet);
 					// dechet.position.set(0, 0, 0);
                     const dechet2 = createDechet2(0, 300, 0);
                     scene.add(dechet2);
                     // alert('Bien joué');
-                    createText("Ce déchet est bien recyclable");
+
+                    createText('Ce dechet est bien recyclable', -200, 200, 0, 0x000000);
                     dechet = dechet2;
                     compteur += 1;
                     console.log(compteur);
@@ -184,6 +221,8 @@
                     scene.remove(dechet);
                     const dechet2 = createDechet2(0, 300, 0);
                     scene.add(dechet2);
+                    removeText();
+                    createText("Ce n'est pas la bonne poubelle", -200, 200, 0, 0x000000);
                     // alert("Ce n'est pas la bonne poubelle voyons !");
                     dechet = dechet2;
                 }
