@@ -46,33 +46,6 @@
         camera.position.z = 800;
         // camera.position.set(600, 400, 0);
 
-        // Create the text
-        // function createText(text) {
-        //     let textGeometry = new TextGeometry(text, {
-        //         font: new FontLoader().load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json'),
-        //         size: 70,
-        //         height: 20,
-        //         // curveSegments: 4,
-        //         // bevelEnabled: false,
-        //         // bevelThickness: 2,
-        //         // bevelSize: 1.5
-
-        //         textGeometry.computeBoundingBox();
-        //         const textMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-        //         let textMesh = new THREE.Mesh(textGeometry, textMaterial);
-        //         textMesh.position.set(0, 200, 0);
-        //         textMesh.scale.x = 100;
-        //         textMesh.scale.y = 100;
-        //         textMesh.scale.z = 100;
-        //         scene.add(textMesh);
-        //     });
-        // }
-
-        // function createText(){
-        //     const loader = new FontLoader();
-        //     loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json')
-        // }
-
         function createText(text, x, y, z, color) {
             const fontLoader = new FontLoader();
             fontLoader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', function (font) {

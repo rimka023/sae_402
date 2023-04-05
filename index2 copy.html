@@ -57,6 +57,61 @@
 
 
 
+// Initialize Three.js scene, camera, renderer, and controls
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+// Load GLTF models with GLTFLoader and store object data in an array
+const loader = new THREE.GLTFLoader();
+const objects = [];
+
+loader.load('model1.gltf', function (gltf) {
+  gltf.scene.traverse(function (child) {
+    if (child.isMesh) {
+      objects.push({
+        name: 'Object 1',
+        recyclable: 'Yes'
+      });
+      scene.add(child);
+    }
+  });
+});
+
+loader.load('model2.gltf', function (gltf) {
+  gltf.scene.traverse(function (child) {
+    if (child.isMesh) {
+      objects.push({
+        name: 'Object 2',
+        recyclable: 'No'
+      });
+      scene.add(child);
+    }
+  });
+});
+
+loader.load('model3.gltf', function (gltf) {
+  gltf.scene.traverse(function (child) {
+    if (child.isMesh) {
+      objects.push({
+        name: 'Object 3',
+        recyclable: 'Yes'
+      });
+      scene.add(child);
+    }
+  });
+});
+
+// Render loop
+function animate() {
+  requestAnimationFrame(animate);
+  renderer.render(scene, camera);
+  controls.update();
+}
+animate();
 
 
 
