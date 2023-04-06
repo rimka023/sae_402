@@ -50,15 +50,14 @@
 
         // Create a camera
         const camera = new THREE.PerspectiveCamera(
-            75, // Field of view
-            window.innerWidth / window.innerHeight, // Aspect ratio
-            0.1, // Near clipping plane
-            10000 // Far clipping plane
+            75,
+            window.innerWidth / window.innerHeight,
+            0.1,
+            10000
         );
         camera.position.x = 0;
         camera.position.y = 2;
         camera.position.z = 4.5;
-        // camera.position.set(600, 400, 0);
 
         let compteur = 0;
 
@@ -119,135 +118,6 @@
         })
 
         //-------Object----------------
-
-        // var loaderObjects = new GLTFLoader();
-        // var objects = [];
-
-
-        // loaderObjects.load(
-        //     // URL du document GLB
-        //     './assets/burger.glb',
-
-        //     // Fonction de rappel appelée lorsque le chargement est terminé
-        //     function (gltf) {
-        //         var object = gltf.scene;
-        //         object.name = 'Burger';
-        //         object.recyclable = 'No';
-        //         object.position.y = 2.5;
-        //         object.scale.y = .25;
-        //         object.scale.x = .25;
-        //         object.scale.z = .25;
-        //         scene.add(object);
-        //         objects.push(object);
-        //     }
-        // );
-
-        // loaderObjects.load(
-        //     // URL du document GLB
-        //     './assets/plastic_bottle.glb',
-
-        //     // Fonction de rappel appelée lorsque le chargement est terminé
-        //     function (gltf) {
-        //         var object = gltf.scene;
-        //         object.name = 'Plastic bottle';
-        //         object.recyclable = 'Yes';
-        //         object.position.y = 2.5;
-        //         object.scale.y = .05;
-        //         object.scale.x = .07;
-        //         object.scale.z = .07;
-        //         scene.add(object);
-        //         objects.push(object);
-        //     }
-        // );
-
-        // loaderObjects.load(
-        //     // URL du document GLB
-        //     './assets/teeth_brush.glb',
-
-        //     // Fonction de rappel appelée lorsque le chargement est terminé
-        //     function (gltf) {
-        //         var object = gltf.scene;
-        //         object.name = 'Teeth brush';
-        //         object.recyclable = 'No';
-        //         object.position.y = 2.5;
-        //         object.position.z = -.15;
-        //         object.position.x = -.12;
-        //         object.scale.y = .015;
-        //         object.scale.x = .025;
-        //         object.scale.z = .025;
-        //         scene.add(object);
-        //         objects.push(object);
-        //     }
-        // );
-        // loaderObjects.load(
-        //     // URL du document GLB
-        //     './assets/slice_of_pizza.glb',
-
-        //     // Fonction de rappel appelée lorsque le chargement est terminé
-        //     function (gltf) {
-        //         var object = gltf.scene;
-        //         object.name = 'Pizza';
-        //         object.recyclable = 'No';
-        //         object.position.y = 2.5;
-        //         // object.position.z = -.15;
-        //         // object.position.x = -.12;
-        //         object.scale.y = 5;
-        //         object.scale.x = 5;
-        //         object.scale.z = 5;
-        //         scene.add(object);
-        //         objects.push(object);
-        //     }
-        // );
-        // loaderObjects.load(
-        //     // URL du document GLB
-        //     './assets/food_can_415g.glb',
-
-        //     // Fonction de rappel appelée lorsque le chargement est terminé
-        //     function (gltf) {
-        //         var object = gltf.scene;
-        //         object.name = 'Food can';
-        //         object.recyclable = 'Yes';
-        //         object.position.y = 2.5;
-        //         // object.position.z = -.15;
-        //         // object.position.x = -.12;
-        //         object.scale.y = 1.5;
-        //         object.scale.x = 1.5;
-        //         object.scale.z = 1.5;
-        //         scene.add(object);
-        //         objects.push(object);
-        //     }
-        // );
-        // loaderObjects.load(
-        //     // URL du document GLB
-        //     './assets/aerosol_en_partes.glb',
-
-        //     // Fonction de rappel appelée lorsque le chargement est terminé
-        //     function (gltf) {
-        //         var object = gltf.scene;
-        //         object.name = 'Aerosol';
-        //         object.recyclable = 'Yes';
-        //         object.position.y = 2.5;
-        //         scene.add(object);
-        //         objects.push(object);
-        //     }
-        // );
-        // loaderObjects.load(
-        //     // URL du document GLB
-        //     './assets/aluminum_tray.glb',
-
-        //     // Fonction de rappel appelée lorsque le chargement est terminé
-        //     function (gltf) {
-        //         var object = gltf.scene;
-        //         object.name = 'Aluminum tray';
-        //         object.recyclable = 'Yes';
-        //         object.position.y = 2.5;
-        //         object.scale.y = .2;
-        //         object.scale.x = .2;
-        //         object.scale.z = .2;
-        //         scene.add(object);
-        //         objects.push(object);
-        //     }
-        // );
 
         const objectsArray = [];
 
@@ -339,18 +209,11 @@
 
                     objectsArray.push(object);
                     scene.add(object);
-                    // createText(object.name, -9, 2.5, -10, 0xffffff);
                     createText2(object.name, -1, 0, 2.8, 0xffffff);
 
 
                 },
                 removeText()
-                // function (xhr) {
-                //     console.log((xhr.loaded / xhr.total * 100) + '% loaded');
-                // },
-                // function (error) {
-                //     console.log('An error happened while loading the glb file');
-                // }
             );
         }
 
@@ -483,14 +346,11 @@
                     const dechet2 = createDechet2(0, 2, 0);
                     // Assume we have loaded a glb object and added it to the objectsArray and scene
                     const objectToRemove = objectsArray[0];
-                    // const objectActive = objectsArray[1];
 
                     // Call the removeGlbObject() function to remove the object from the array and scene
                     removeGlbObject(objectToRemove, objectsArray);
 
-                    // scene.add(dechet2);
-                    createText("This waste goes in the black garbage can, it is not recyclable", -9, 1, -10, 0xffffff);
-                    // createText(objectActive.name, -9, 2.5, -10, 0xffffff);
+                    createText("This waste goes in the black trash, it is not recyclable", -9, 1, -10, 0xffffff);
                     loadRandomGlbObject(objectsArray);
 
                     dechet = dechet2;
@@ -502,17 +362,13 @@
                 else if (selectedObject === poubelleJ && objectsArray[0].recyclable == "Yes") {
                     scene.remove(dechet);
                     removeText();
-                    // selectedObject.add(dechet);
-                    // dechet.position.set(0, 0, 0);
+
                     const dechet2 = createDechet2(0, 2, 0);
                     const objectToRemove = objectsArray[0];
-                    // const objectActive = objectsArray[1];
 
                     // Call the removeGlbObject() function to remove the object from the array and scene
                     removeGlbObject(objectToRemove, objectsArray);
-                    // scene.add(dechet2);
                     createText('This waste is well recyclable', -5, 1, -10, 0xffffff);
-                    // createText(objectActive.name, -9, 2.5, -10, 0xffffff);
                     loadRandomGlbObject(objectsArray);
                     dechet = dechet2;
                     compteur += 1;
@@ -524,15 +380,12 @@
                     scene.remove(dechet);
                     const dechet2 = createDechet2(0, 2, 0);
                     const objectToRemove = objectsArray[0];
-                    // const objectActive = objectsArray[1];
 
                     // Call the removeGlbObject() function to remove the object from the array and scene
                     removeGlbObject(objectToRemove, objectsArray);
-                    // scene.add(dechet2);
                     removeText();
                     loadRandomGlbObject(objectsArray);
-                    createText("This is not the right garbage can", -5, 1, -10, 0xffffff);
-                    // createText(objectActive.name, -9, 2.5, -10, 0xffffff);
+                    createText("This is not the right trash", -5, 1, -10, 0xffffff);
                     dechet = dechet2;
                 }
             }
